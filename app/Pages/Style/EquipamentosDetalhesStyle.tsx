@@ -93,12 +93,25 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         height: '200%'
     },
     container_datalhes_maior_maior: {
-        height: 1650
+        height: 1920
     }, 
     detalher_tamanho_maior: {
-        height: 1800
+        height: 2800
+    },
+    container_QrCode: {
+        width: "90%",
+        margin: "auto",
+        alignItems: 'center'
+    },
+    just_margin_top_and_background: {
+        marginTop: 10,
+        width: "100%",
+        height: 210,
+        alignItems: "center",
+        justifyContent: 'center',
+        backgroundColor: "#909090",
+        borderRadius: 10,
     }
-    
 })
 
 export default styleEquipamentosDetalhes

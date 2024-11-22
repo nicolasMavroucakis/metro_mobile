@@ -12,7 +12,7 @@ import StartFirebase from '@/crud/firebaseConfig';
 import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import styleEquipamentosDetalhes from "../../Style/EquipamentosDetalhesStyle";
 import { GlobalContext } from "@/GlobalContext/GlobalContext";
-import QRCode from 'qrcode.react';
+import QRCode from 'react-native-qrcode-svg';
 import { deleteDoc } from 'firebase/firestore';
 
 type EquipamentosNovos = {
@@ -20,6 +20,8 @@ type EquipamentosNovos = {
 };
 
 const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
+    const [qrValue, setQrValue] = useState<string>('');
+
     const agora = new Date();
     const agoraStringLocal = agora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
     console.log(agoraStringLocal);
@@ -147,14 +149,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
         }
     };
 
-        // useEffect para atualizar o QR Code sempre que o tipoEquipamento for alterado
-//    useEffect(() => {
-//        setQrValue(tipoEquipamento);
-//    }, [tipoEquipamento]);
-
-//    const handleTipoEquipamentoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//        setTipoEquipamento(event.target.value);
-   // };
+    useEffect(() => { setQrValue(numeroEquipamento || '');  }, [numeroEquipamento]);
 
     return (
         <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
@@ -345,6 +340,23 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 multiline
                                 style={styleEquipamentosDetalhes.box_comprida_alta}
                             />
+                        </View>
+                        <View style={styleEquipamentosDetalhes.container_QrCode}>
+                            <View>
+                                <Text style={{margin: 'auto', fontSize: 16, fontWeight: '500'}}>Qr Code do Equipamento</Text>
+                            </View>
+                            <View style={styleEquipamentosDetalhes.just_margin_top_and_background}>
+                                {qrValue ? (
+                                    <QRCode
+                                        value={qrValue}
+                                        size={200} // Tamanho do QR Code
+                                        backgroundColor="white"
+                                        color="black"
+                                    />
+                                ) : (
+                                    <Text>Insira o tipo de equipamento para gerar o QR Code</Text>
+                                )}
+                            </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
                             <TouchableOpacity 
