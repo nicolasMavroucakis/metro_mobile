@@ -12,6 +12,7 @@ import StartFirebase from '@/crud/firebaseConfig';
 import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import styleEquipamentosDetalhes from "../../Style/EquipamentosDetalhesStyle";
 import { GlobalContext } from "@/GlobalContext/GlobalContext";
+import QRCode from 'qrcode.react';
 import { deleteDoc } from 'firebase/firestore';
 
 type EquipamentosNovos = {
@@ -46,20 +47,21 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
             [field]: value
         }));
     };
-    
+
     const fetchEquipamentoOptions = async () => {
         try {
             const equipamentosRef = collection(db, 'Opcoes');
             const extintorDocRef = doc(equipamentosRef, 'Extintor');
             const querySnapshot = await getDoc(extintorDocRef);
-    
+
             if (!querySnapshot.exists()) {
                 Alert.alert("Erro", "Opções do equipamento não encontradas.");
                 return;
             }
-    
+
             const opcoesEquipamento = querySnapshot.data();
             console.log("Opções do Equipamento:", opcoesEquipamento);
+
             setEditEquipamento(prev => ({
                 ...prev,
                 Area: opcoesEquipamento.Area || [],
@@ -71,17 +73,26 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                 Setor: opcoesEquipamento.Setor || [],
                 Tipo: opcoesEquipamento.Tipo || []
             }));
-    
+
+            setArea(opcoesEquipamento.Area ? opcoesEquipamento.Area[0] : '')
+            setFabricante(opcoesEquipamento.Fabricante ? opcoesEquipamento.Fabricante[0] : '')
+            setCapacidade(opcoesEquipamento.Capacidade ? opcoesEquipamento.Capacidade[0] : '')
+            setGerencia(opcoesEquipamento.Gerencia ? opcoesEquipamento.Gerencia[0] : '')
+            setLocal(opcoesEquipamento.Local ? opcoesEquipamento.Local[0] : '')
+            setPredio(opcoesEquipamento.Predio ? opcoesEquipamento.Predio[0] : '')
+            setSetor(opcoesEquipamento.Setor ? opcoesEquipamento.Setor[0] : '')
+            setTipo(opcoesEquipamento.Tipo ? opcoesEquipamento.Tipo[0] : '')
+
         } catch (error) {
-            console.error("Erro ao buscar as opções do equipamento:", error);
-            Alert.alert("Erro", "Ocorreu um erro ao buscar as opções do equipamento.");
+            console.error("Erro ao buscar as opções do equipamento:", error)
+            Alert.alert("Erro", "Ocorreu um erro ao buscar as opções do equipamento.")
         }
     };
-    
+
     useEffect(() => {
-        fetchEquipamentoOptions();
+        fetchEquipamentoOptions()
     }, []);
-    
+
     const [numeroEquipamento, setNumeroEquipamento] = useState("")
     const [tipoEquipamento, setTipoEquipamento] = useState("")
     const [patrimonio, setPatrimonio] = useState("")
@@ -96,38 +107,54 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
     const [setor, setSetor] = useState("")
     const [tipo, setTipo] = useState("")
     const [observacao, setObservacao] = useState("")
+    const [seloImetro, setSeloImetro] = useState("")
+    const [proximaRetirada, setProximaRetirada] = useState("")
+    const [confirmades, setConfirmades] = useState("")
 
     const handleNewEquipamento = async () => {
-        try {
-            const equipamentoRef = doc(collection(db, 'Equipamentos'));
-            const equipamentoFormatado = {
-                "Numero_Equipamento": numeroEquipamento, 
-                "Proxima_Manutencao": proxManutencao || anoSeguinteStringLocal, 
-                "Data_da_Inspecao": agoraStringLocal, 
-                "Area": area, 
-                "Capacidade": capacidade, 
-                "Local": local, 
-                "Nao_Conformidades": "", 
-                "Observacao": observacao, 
-                "Patrimonio": patrimonio, 
-                "Predio": predio, 
-                "Proxima_Retirada": "", 
-                "Selo_Inmetro": "", 
-                "Setor": setor, 
-                "Tipo": tipo, 
-                "Fabricante": fabricante,
-            };
+        if (numeroEquipamento == "" || seloImetro == "" || patrimonio == "" || proximaRetirada == "" || confirmades == "") {
+            Alert.alert("Falha", "Os campos Numero do Equipamento, Selo do Imetro, Patrimonio, Proxima Retirada ou Conformidades não podem estar vaizos")
+        }   else    {
+            try {
+                const equipamentoRef = doc(collection(db, 'Equipamentos'));
+                const equipamentoFormatado = {
+                    "Numero_Equipamento": numeroEquipamento,
+                    "Proxima_Manutencao": proxManutencao || anoSeguinteStringLocal,
+                    "Data_da_Inspecao": agoraStringLocal,
+                    "Area": area,
+                    "Capacidade": capacidade,
+                    "Local": local,
+                    "Nao_Conformidades": confirmades,
+                    "Observacao": observacao,
+                    "Patrimonio": patrimonio,
+                    "Predio": predio,
+                    "Proxima_Retirada": proximaRetirada,
+                    "Selo_Inmetro": seloImetro,
+                    "Setor": setor,
+                    "Tipo": tipo,
+                    "Fabricante": fabricante,
+                };
 
-            await setDoc(equipamentoRef, equipamentoFormatado);
+                await setDoc(equipamentoRef, equipamentoFormatado);
 
-            Alert.alert("Sucesso", "Equipamento adicionado com sucesso.");
-            navigation.navigate('Home');
+                Alert.alert("Sucesso", "Equipamento adicionado com sucesso.");
+                navigation.navigate('Home');
 
-        } catch (error) {
-            console.error("Erro ao adicionar o equipamento:", error);
-            Alert.alert("Erro", "Ocorreu um erro ao adicionar o equipamento.");
+            } catch (error) {
+                console.error("Erro ao adicionar o equipamento:", error);
+                Alert.alert("Erro", "Ocorreu um erro ao adicionar o equipamento.");
+            }
         }
-    };  
+    };
+
+        // useEffect para atualizar o QR Code sempre que o tipoEquipamento for alterado
+//    useEffect(() => {
+//        setQrValue(tipoEquipamento);
+//    }, [tipoEquipamento]);
+
+//    const handleTipoEquipamentoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//        setTipoEquipamento(event.target.value);
+   // };
 
     return (
         <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
@@ -149,17 +176,13 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Tipo de Equipamento:</Text>
+                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Selo do Imetro:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
-                                <Picker
-                                    selectedValue={tipo}
-                                    onValueChange={(itemValue) => setTipo(itemValue)}
+                                <TextInput
+                                    value={seloImetro}
+                                    onChangeText={(value) => setSeloImetro(value)}
                                     style={{ color: modoEscuro ? 'white' : 'black' }}
-                                >
-                                    {editEquipamento.Tipo && editEquipamento.Tipo.map((tipo: string | undefined, index: React.Key | null | undefined) => (
-                                        <Picker.Item key={index} label={tipo} value={tipo} />
-                                    ))}
-                                </Picker>
+                                />
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
@@ -170,7 +193,22 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 style={styleEquipamentosDetalhes.box_comprida_baixa}
                             />
                         </View>
-
+                        <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
+                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Proxima Retirada:</Text>
+                            <TextInput
+                                value={proximaRetirada}
+                                onChangeText={(value) => setProximaRetirada(value)}
+                                style={styleEquipamentosDetalhes.box_comprida_baixa}
+                            />
+                        </View>
+                        <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
+                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Confirmades:</Text>
+                            <TextInput
+                                value={proximaRetirada}
+                                onChangeText={(value) => setProximaRetirada(value)}
+                                style={styleEquipamentosDetalhes.box_comprida_baixa}
+                            />
+                        </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas}>
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
                                 <Text style={styleEquipamentosDetalhes.text_box_outside}>Ult Manutenção:</Text>
@@ -185,6 +223,20 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                         {anoSeguinteStringLocal || ""}
                                     </Text>
                                 </View>
+                            </View>
+                        </View>
+                        <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
+                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Tipo de Equipamento:</Text>
+                            <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
+                                <Picker
+                                    selectedValue={tipo}
+                                    onValueChange={(itemValue) => setTipo(itemValue)}
+                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                >
+                                    {editEquipamento.Tipo && editEquipamento.Tipo.map((tipo: string | undefined, index: React.Key | null | undefined) => (
+                                        <Picker.Item key={index} label={tipo} value={tipo} />
+                                    ))}
+                                </Picker>
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>

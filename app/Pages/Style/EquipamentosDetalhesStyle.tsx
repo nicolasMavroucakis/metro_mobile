@@ -93,10 +93,10 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         height: '200%'
     },
     container_datalhes_maior_maior: {
-        height: 1380
+        height: 1650
     }, 
     detalher_tamanho_maior: {
-        height: 1500
+        height: 1800
     }
     
 })
