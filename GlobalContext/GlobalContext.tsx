@@ -10,7 +10,12 @@ interface GlobalContextType {
     setSenha: Dispatch<SetStateAction<string>>;
     nome: string;
     setNome: Dispatch<SetStateAction<string>>;
+    hasMediaLibraryPermission: boolean;
+    setHasMediaLibraryPermission: Dispatch<SetStateAction<boolean>>;
+    setTipoPermissao: Dispatch<SetStateAction<string>>;
+    tipoPermissao: string;
 }
+
 
 export const GlobalContext = createContext<GlobalContextType>({
     modoEscuro: false,
@@ -20,14 +25,20 @@ export const GlobalContext = createContext<GlobalContextType>({
     senha: '',
     setSenha: () => {},
     nome: '',
-    setNome: () => {}
+    setNome: () => {},
+    hasMediaLibraryPermission: false,
+    setHasMediaLibraryPermission: () => {},
+    tipoPermissao: '',
+    setTipoPermissao: () => {}
 });
 
 export const GlobalContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [modoEscuro, setModoEscuro] = useState<boolean>(false);
     const [usuarioGlobal, setUsuarioGlobal] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
-    const [nome, setNome] = useState<string>('')
+    const [nome, setNome] = useState<string>('');
+    const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState<boolean>(false);
+    const [tipoPermissao, setTipoPermissao] = useState<string>('')
 
     useEffect(() => {
         const loadAsyncData = async () => {
@@ -53,7 +64,11 @@ export const GlobalContextProvider: React.FC<{ children: ReactNode }> = ({ child
             senha,
             setSenha,
             nome,
-            setNome
+            setNome,
+            hasMediaLibraryPermission,
+            setHasMediaLibraryPermission,
+            tipoPermissao,
+            setTipoPermissao
         }}>
             {children}
         </GlobalContext.Provider>

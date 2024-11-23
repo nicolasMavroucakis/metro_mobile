@@ -17,7 +17,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
     const db = StartFirebase();
     const [usuario, setUsuario] = useState('');
     const [senha, setSenha] = useState('');
-    const { setUsuarioGlobal, setNome } = useContext(GlobalContext);
+    const { setUsuarioGlobal, setNome, setTipoPermissao } = useContext(GlobalContext);
     const { setArrayEquipamentosGlobal } = useContext(EquipamentoContext);
 
     const handleLogin = async () => {
@@ -39,6 +39,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 
                 setUsuarioGlobal(usuario);
                 setNome(userData.Nome);
+                setTipoPermissao(userData.Permissao);
                 handleEquipamentosIfTrue();
                 navigation.navigate('Home');
             } else {

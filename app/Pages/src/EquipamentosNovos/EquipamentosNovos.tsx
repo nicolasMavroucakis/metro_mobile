@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert} from "react-native";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import {View, Text, ScrollView, TouchableOpacity, TextInput, Alert, Button, Modal, TouchableWithoutFeedback} from "react-native";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Picker } from '@react-native-picker/picker';
 import styleHome from "@/app/Pages/Style/HomeStyle";
@@ -13,7 +13,8 @@ import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } fro
 import styleEquipamentosDetalhes from "../../Style/EquipamentosDetalhesStyle";
 import { GlobalContext } from "@/GlobalContext/GlobalContext";
 import QRCode from 'react-native-qrcode-svg';
-import { deleteDoc } from 'firebase/firestore';
+import * as MediaLibrary from 'expo-media-library'
+import ViewShot from 'react-native-view-shot';
 
 type EquipamentosNovos = {
     navigation: StackNavigationProp<any, any>;
@@ -21,6 +22,7 @@ type EquipamentosNovos = {
 
 const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
     const [qrValue, setQrValue] = useState<string>('');
+    const viewShotRef = useRef<ViewShot>(null)
 
     const agora = new Date();
     const agoraStringLocal = agora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
@@ -32,7 +34,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
     const anoSeguinteStringLocal = anoSeguinte.toLocaleDateString("pt-BR"); 
     console.log(anoSeguinteStringLocal);
     
-    const { modoEscuro } = useContext(GlobalContext);
+    const { modoEscuro, hasMediaLibraryPermission, setHasMediaLibraryPermission } = useContext(GlobalContext);
     const { equipamentoSelecionado, setEquipamentoSelecionado, NumeroGlobal } = useContext(EquipamentoContext);
     
     const [editEquipamento, setEditEquipamento] = useState({ ...equipamentoSelecionado });
@@ -113,6 +115,8 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
     const [proximaRetirada, setProximaRetirada] = useState("")
     const [confirmades, setConfirmades] = useState("")
 
+    const [viewHeight, setViewHeight] = useState(50);
+
     const handleNewEquipamento = async () => {
         if (numeroEquipamento == "" || seloImetro == "" || patrimonio == "" || proximaRetirada == "" || confirmades == "") {
             Alert.alert("Falha", "Os campos Numero do Equipamento, Selo do Imetro, Patrimonio, Proxima Retirada ou Conformidades não podem estar vaizos")
@@ -150,6 +154,34 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
     };
 
     useEffect(() => { setQrValue(numeroEquipamento || '');  }, [numeroEquipamento]);
+
+    const handleCapture = async () => {
+        if (!hasMediaLibraryPermission) {
+            Alert.alert('Permissão negada', 'Não foi possível salvar a imagem na galeria.');
+            return;
+        }
+
+        const captureFunction = viewShotRef.current?.capture;
+        if (captureFunction) {
+            try {
+                const uri = await captureFunction();
+                console.log('QR Code capturado:', uri);
+
+                if (uri) {
+                    const asset = await MediaLibrary.createAssetAsync(uri);
+                    await MediaLibrary.createAlbumAsync('QRCode', asset, false);
+                    Alert.alert('Sucesso', 'QR Code salvo na galeria!');
+                } else {
+                    throw new Error('Falha ao capturar a imagem do QR Code');
+                }
+            } catch (error) {
+                console.error('Erro ao capturar e salvar a imagem:', error);
+                Alert.alert('Erro', 'Ocorreu um erro ao tentar salvar a imagem.');
+            }
+        } else {
+            Alert.alert('Erro', 'Ocorreu um erro ao tentar capturar a imagem.');
+        }
+    };
 
     return (
         <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
@@ -199,8 +231,8 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
                             <Text style={styleEquipamentosDetalhes.text_box_outside}>Confirmades:</Text>
                             <TextInput
-                                value={proximaRetirada}
-                                onChangeText={(value) => setProximaRetirada(value)}
+                                value={confirmades}
+                                onChangeText={(value) => setConfirmades(value)}
                                 style={styleEquipamentosDetalhes.box_comprida_baixa}
                             />
                         </View>
@@ -222,13 +254,14 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
                             <Text style={styleEquipamentosDetalhes.text_box_outside}>Tipo de Equipamento:</Text>
-                            <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
+                            <View style={[styleEquipamentosDetalhes.box_comprida_baixa, { overflow: 'hidden' }]}>
                                 <Picker
                                     selectedValue={tipo}
                                     onValueChange={(itemValue) => setTipo(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Tipo && editEquipamento.Tipo.map((tipo: string | undefined, index: React.Key | null | undefined) => (
+                                    {Array.isArray(editEquipamento.Tipo) && editEquipamento.Tipo.map((tipo: string | undefined, index: React.Key | null | undefined) => (
                                         <Picker.Item key={index} label={tipo} value={tipo} />
                                     ))}
                                 </Picker>
@@ -236,13 +269,14 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
                             <Text style={styleEquipamentosDetalhes.text_box_outside}>Capacidade:</Text>
-                            <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
+                            <View style={[styleEquipamentosDetalhes.box_comprida_baixa, { overflow: 'hidden' }]}>
                                 <Picker
                                     selectedValue={capacidade}
                                     onValueChange={(itemValue) => setCapacidade(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Capacidade && editEquipamento.Capacidade.map((capacidade, index) => (
+                                    {Array.isArray(editEquipamento.Capacidade) && editEquipamento.Capacidade.map((capacidade, index) => (
                                         <Picker.Item key={index} label={capacidade} value={capacidade} />
                                     ))}
                                 </Picker>
@@ -254,9 +288,10 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 <Picker
                                     selectedValue={fabricante}
                                     onValueChange={(itemValue) => setFabricante(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Fabricante && editEquipamento.Fabricante.map((fabricante, index) => (
+                                    {Array.isArray(editEquipamento.Fabricante) && editEquipamento.Fabricante.map((fabricante, index) => (
                                         <Picker.Item key={index} label={fabricante} value={fabricante} />
                                     ))}
                                 </Picker>
@@ -268,9 +303,10 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 <Picker
                                     selectedValue={area}
                                     onValueChange={(itemValue) => setArea(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Area && editEquipamento.Area.map((area, index) => (
+                                    {Array.isArray(editEquipamento.Area) && editEquipamento.Area.map((area, index) => (
                                         <Picker.Item key={index} label={area} value={area} />
                                     ))}
                                 </Picker>
@@ -282,9 +318,10 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 <Picker
                                     selectedValue={gerencia}
                                     onValueChange={(itemValue) => setGerencia(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Gerencia && editEquipamento.Gerencia.map((gerencia, index) => (
+                                    {Array.isArray(editEquipamento.Gerencia) && editEquipamento.Gerencia.map((gerencia, index) => (
                                         <Picker.Item key={index} label={gerencia} value={gerencia} />
                                     ))}
                                 </Picker>
@@ -296,9 +333,10 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 <Picker
                                     selectedValue={local}
                                     onValueChange={(itemValue) => setLocal(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Local && editEquipamento.Local.map((local, index) => (
+                                    {Array.isArray(editEquipamento.Local) && editEquipamento.Local.map((local, index) => (
                                         <Picker.Item key={index} label={local} value={local} />
                                     ))}
                                 </Picker>
@@ -310,9 +348,10 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 <Picker
                                     selectedValue={predio}
                                     onValueChange={(itemValue) => setPredio(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Predio && editEquipamento.Predio.map((predio, index) => (
+                                    {Array.isArray(editEquipamento.Predio) && editEquipamento.Predio.map((predio, index) => (
                                         <Picker.Item key={index} label={predio} value={predio} />
                                     ))}
                                 </Picker>
@@ -324,9 +363,10 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 <Picker
                                     selectedValue={setor}
                                     onValueChange={(itemValue) => setSetor(itemValue)}
-                                    style={{ color: modoEscuro ? 'white' : 'black' }}
+                                    itemStyle={{ height: "100%", width: "100%", color: modoEscuro ? 'white' : 'black' }}
+                                    mode="dropdown"
                                 >
-                                    {editEquipamento.Setor && editEquipamento.Setor.map((setor, index) => (
+                                    {Array.isArray(editEquipamento.Setor) && editEquipamento.Setor.map((setor, index) => (
                                         <Picker.Item key={index} label={setor} value={setor} />
                                     ))}
                                 </Picker>
@@ -343,18 +383,15 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                         </View>
                         <View style={styleEquipamentosDetalhes.container_QrCode}>
                             <View>
-                                <Text style={{margin: 'auto', fontSize: 16, fontWeight: '500'}}>Qr Code do Equipamento</Text>
+                                <Text style={{ fontSize: 16, fontWeight: '500'}}>Qr Code do Equipamento</Text>
                             </View>
                             <View style={styleEquipamentosDetalhes.just_margin_top_and_background}>
                                 {qrValue ? (
-                                    <QRCode
-                                        value={qrValue}
-                                        size={200} // Tamanho do QR Code
-                                        backgroundColor="white"
-                                        color="black"
-                                    />
+                                    <ViewShot ref={viewShotRef} options={{ format: 'png', quality: 1.0 }}>
+                                        <QRCode value={qrValue} size={200} />
+                                    </ViewShot>
                                 ) : (
-                                    <Text>Insira o tipo de equipamento para gerar o QR Code</Text>
+                                    <Text>Insira o número do equipamento para gerar o QR Code</Text>
                                 )}
                             </View>
                         </View>
@@ -365,6 +402,16 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             >
                                 <Text style={{ fontSize: 18, fontWeight: '700', color: 'white' }}>
                                     Finalizar Inspeção
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
+                            <TouchableOpacity
+                                style={styleEquipamentosDetalhes.botao_dowload}
+                                onPress={handleCapture}
+                            >
+                                <Text style={{ fontSize: 18, fontWeight: '700', color: 'white' }}>
+                                    Baixar QrCode
                                 </Text>
                             </TouchableOpacity>
                         </View>

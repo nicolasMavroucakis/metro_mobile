@@ -8,17 +8,20 @@ import ProximasManutencoes from "@/components/Proximas_manutencoes";
 import NavBar from "@/components/NavBar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styleUsuario from "../../Style/UsuarioStyle";
-import { useContext } from "react";
+import {useContext, useEffect} from "react";
 import { GlobalContext } from "@/GlobalContext/GlobalContext";
 import { EquipamentoContext } from "@/GlobalContext/GlobalContextEquipamentos";
+import * as MediaLibrary from "expo-media-library";
 
 type HomeProps = {
     navigation: StackNavigationProp<any, any>;
 };
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
-    const { modoEscuro, setModoEscuro, nome } = useContext(GlobalContext);
+    const { modoEscuro, setModoEscuro, nome, setHasMediaLibraryPermission } = useContext(GlobalContext);
     const {equipamentosProximaInspecao, equipamentosManutencaoRecente} = useContext(EquipamentoContext)
+
+    useEffect(() => { (async () => { const { status } = await MediaLibrary.requestPermissionsAsync(); setHasMediaLibraryPermission(status === 'granted'); })(); }, []);
     return (
         <SafeAreaView style={modoEscuro ?  styleUsuario.background_escuro: styleHome.background}>
             <Header/>

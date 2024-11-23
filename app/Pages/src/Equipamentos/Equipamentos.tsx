@@ -17,7 +17,7 @@ type Equipamentos = {
 };
 
 const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
-    const { modoEscuro, setModoEscuro } = useContext(GlobalContext);
+    const { modoEscuro, setModoEscuro, tipoPermissao} = useContext(GlobalContext);
     const { arrayEquipamentosGlobal } = useContext(EquipamentoContext);
     const { setEquipamentoSelecionado, NumeroGlobal, setNumeroGlobal } = useContext(EquipamentoContext);
     const equipamentosPesquisa = arrayEquipamentosGlobal;
@@ -27,6 +27,14 @@ const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
     const [numeroEquipamentoValueInput, setNumeroEquipamentoValueInput] = useState('');
 
     const [pequisaIsExpanded, setPesquisaIsExpanded] = useState(false);
+
+    const conditionalNavigation = () => {
+        if (tipoPermissao != "Consultor") {
+            navigation.navigate('EquipamentoManutencaoIniciada')
+        } else {
+            Alert.alert("Erro", "voce nao tem permissao para acessar essa pagina")
+        }
+    }
 
     const handleClickInput = () => {
         setPesquisaIsExpanded(prev => !prev);
@@ -198,7 +206,7 @@ const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
                     )}
                 </ScrollView>
                 <View style={styleEquipamentos.button_Add_Equipament_Container}>
-                    <TouchableOpacity style={styleEquipamentos.button_Add_Equipament} onPress={() => navigation.navigate('EquipamentosNovos') }>
+                    <TouchableOpacity style={styleEquipamentos.button_Add_Equipament} onPress={conditionalNavigation}>
                         <Text style={{color: "white", fontSize: 20}}>Adicionar Equipamento</Text>
                     </TouchableOpacity>
                 </View>
