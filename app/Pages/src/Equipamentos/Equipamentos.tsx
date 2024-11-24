@@ -30,7 +30,7 @@ const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
 
     const conditionalNavigation = () => {
         if (tipoPermissao != "Consultor") {
-            navigation.navigate('EquipamentoManutencaoIniciada')
+            navigation.navigate('EquipamentosNovos')
         } else {
             Alert.alert("Erro", "voce nao tem permissao para acessar essa pagina")
         }

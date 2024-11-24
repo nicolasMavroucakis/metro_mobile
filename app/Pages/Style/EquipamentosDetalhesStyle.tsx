@@ -65,6 +65,14 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         width: '45%',
         alignItems: 'center'
     },
+    container_black: {
+        backgroundColor: "#141515",
+        height: 2060
+    },
+    container_white: {
+        backgroundColor: "#D9D9D9",
+        height: 2060
+    },
     box_comprida_alta: {
         width:'90%',
         height: 200,
@@ -128,6 +136,12 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: "#909090",
         borderRadius: 10,
+    },
+    color_white: {
+        color: "#FFFFFF",
+    },
+    color_black: {
+        color: "black",
     }
 })
 

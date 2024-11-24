@@ -71,13 +71,13 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
     <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
         <Header />
             <ScrollView contentContainerStyle={[styleHome.information_container, styleEquipamentosDetalhes.detalher_tamanho_maior_detalhes]}>
-                <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes]}>
+                <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes, modoEscuro ? styleEquipamentosDetalhes.container_black : null]}>
                     <View style={styleEquipamentosDetalhes.container_datalhes_title}>
                         <Text style={styleEquipamentosDetalhes.datalhes_title}>Informações do Equipamento</Text>
                     </View>
                     <View style={styleEquipamentosDetalhes.container_detalhes_information}>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>
                                 Numero Equipamento:
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>

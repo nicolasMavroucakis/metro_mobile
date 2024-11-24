@@ -187,13 +187,13 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
         <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
             <Header />
             <ScrollView contentContainerStyle={[styleHome.information_container, styleEquipamentosDetalhes.detalher_tamanho_maior]}>
-                <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior]}>
+                <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes, modoEscuro ? styleEquipamentosDetalhes.container_black : styleEquipamentosDetalhes.container_white]}>
                     <View style={styleEquipamentosDetalhes.container_datalhes_title}>
                         <Text style={styleEquipamentosDetalhes.datalhes_title}>Informações do Equipamento</Text>
                     </View>
                     <View style={styleEquipamentosDetalhes.container_detalhes_information}>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Número do Equipamento:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Número do Equipamento:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <TextInput
                                     value={numeroEquipamento}
@@ -203,7 +203,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Selo do Imetro:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Selo do Imetro:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <TextInput
                                     value={seloImetro}
@@ -213,7 +213,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Patrimonio:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Patrimonio:</Text>
                             <TextInput
                                 value={patrimonio}
                                 onChangeText={(value) => setPatrimonio(value)}
@@ -221,7 +221,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             />
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Proxima Retirada:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Proxima Retirada:</Text>
                             <TextInput
                                 value={proximaRetirada}
                                 onChangeText={(value) => setProximaRetirada(value)}
@@ -229,7 +229,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             />
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Confirmades:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Confirmades:</Text>
                             <TextInput
                                 value={confirmades}
                                 onChangeText={(value) => setConfirmades(value)}
@@ -238,13 +238,13 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas}>
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
-                                <Text style={styleEquipamentosDetalhes.text_box_outside}>Ult Manutenção:</Text>
+                                <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Ult Manutenção:</Text>
                                 <Text style={styleEquipamentosDetalhes.box_curta_baixa}>
                                     {agoraStringLocal}
                                 </Text>
                             </View>
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
-                                <Text style={styleEquipamentosDetalhes.text_box_outside}>Prox Manutenção:</Text>
+                                <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Prox Manutenção:</Text>
                                 <View style={styleEquipamentosDetalhes.box_curta_baixa}>
                                     <Text style={{ color: modoEscuro ? 'white' : 'black'}}>
                                         {anoSeguinteStringLocal || ""}
@@ -253,7 +253,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Tipo de Equipamento:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Tipo de Equipamento:</Text>
                             <View style={[styleEquipamentosDetalhes.box_comprida_baixa, { overflow: 'hidden' }]}>
                                 <Picker
                                     selectedValue={tipo}
@@ -268,7 +268,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Capacidade:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Capacidade:</Text>
                             <View style={[styleEquipamentosDetalhes.box_comprida_baixa, { overflow: 'hidden' }]}>
                                 <Picker
                                     selectedValue={capacidade}
@@ -283,7 +283,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Fabricante:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Fabricante:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <Picker
                                     selectedValue={fabricante}
@@ -298,7 +298,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Área:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Área:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <Picker
                                     selectedValue={area}
@@ -313,7 +313,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Gerência:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Gerência:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <Picker
                                     selectedValue={gerencia}
@@ -328,7 +328,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Local:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Local:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <Picker
                                     selectedValue={local}
@@ -343,7 +343,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Prédio:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Prédio:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <Picker
                                     selectedValue={predio}
@@ -358,7 +358,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Setor:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Setor:</Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <Picker
                                     selectedValue={setor}
@@ -373,7 +373,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>Observações:</Text>
+                            <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Observações:</Text>
                             <TextInput
                                 value={observacao}
                                 onChangeText={(value) => setObservacao(value)}
@@ -383,7 +383,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                         </View>
                         <View style={styleEquipamentosDetalhes.container_QrCode}>
                             <View>
-                                <Text style={{ fontSize: 16, fontWeight: '500'}}>Qr Code do Equipamento</Text>
+                                <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Qr Code do Equipamento</Text>
                             </View>
                             <View style={styleEquipamentosDetalhes.just_margin_top_and_background}>
                                 {qrValue ? (
