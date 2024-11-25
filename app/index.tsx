@@ -15,6 +15,7 @@ import 'regenerator-runtime/runtime';
 
 import { GlobalContextProvider } from '@/GlobalContext/GlobalContext';
 import { EquipamentoContextProvider } from '@/GlobalContext/GlobalContextEquipamentos';
+import { EquipamentoProvider} from "@/GlobalContext/GlobalOptionsContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,19 +23,21 @@ export default function Index() {
   return (
     <GlobalContextProvider>
       <EquipamentoContextProvider>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
-          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-          <Stack.Screen name="Manutencoes" component={Manutencoes} options={{ headerShown: false }}/>
-          <Stack.Screen name="Equipamentos" component={Equipamentos} options={{ headerShown: false }}/>
-          <Stack.Screen name="Usuario" component={Usuario} options={{ headerShown: false }}/>
-          <Stack.Screen name="QRCode" component={QR_Code} options={{ headerShown: false }}/>
-          <Stack.Screen name="Proxima_manutencao" component={ProximasManutencoesScreen} options={{ headerShown: false }}/>
-          <Stack.Screen name="Ultima_manutencao" component={UltimasManutencoes} options={{ headerShown: false }}/>
-          <Stack.Screen name="EquipamentoDetalhes" component={EquipamentoDetalhes} options={{ headerShown: false }}/>
-          <Stack.Screen name="EquipamentoManutencaoIniciada" component={EquipamentoManutencaoIniciada} options={{ headerShown: false }}/>
-          <Stack.Screen name="EquipamentosNovos" component={EquipamentosNovos} options={{ headerShown: false }}/>
-        </Stack.Navigator>
+        <EquipamentoProvider>
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+            <Stack.Screen name="Manutencoes" component={Manutencoes} options={{ headerShown: false }}/>
+            <Stack.Screen name="Equipamentos" component={Equipamentos} options={{ headerShown: false }}/>
+            <Stack.Screen name="Usuario" component={Usuario} options={{ headerShown: false }}/>
+            <Stack.Screen name="QRCode" component={QR_Code} options={{ headerShown: false }}/>
+            <Stack.Screen name="Proxima_manutencao" component={ProximasManutencoesScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name="Ultima_manutencao" component={UltimasManutencoes} options={{ headerShown: false }}/>
+            <Stack.Screen name="EquipamentoDetalhes" component={EquipamentoDetalhes} options={{ headerShown: false }}/>
+            <Stack.Screen name="EquipamentoManutencaoIniciada" component={EquipamentoManutencaoIniciada} options={{ headerShown: false }}/>
+            <Stack.Screen name="EquipamentosNovos" component={EquipamentosNovos} options={{ headerShown: false }}/>
+          </Stack.Navigator>
+        </EquipamentoProvider>
       </EquipamentoContextProvider>
     </GlobalContextProvider>
   );

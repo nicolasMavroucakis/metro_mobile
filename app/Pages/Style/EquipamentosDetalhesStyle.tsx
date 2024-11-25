@@ -15,6 +15,11 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         fontSize: 20,
         fontWeight: '700'
     },
+    datalhes_title_dark: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: 'white'
+    },
     container_datalhes_title: {
         alignItems: 'center',
         width: '90%',
@@ -38,6 +43,11 @@ const styleEquipamentosDetalhes= StyleSheet.create({
     text_box_outside: {
         fontSize: 15,
         fontWeight: '500'
+    },
+    text_box_outside_dark: {
+        fontSize: 15,
+        fontWeight: '500',
+        color: 'white'
     },
     container_detalhes_information_boxes: {
         width: '100%',
@@ -67,11 +77,11 @@ const styleEquipamentosDetalhes= StyleSheet.create({
     },
     container_black: {
         backgroundColor: "#141515",
-        height: 2060
+        height: 2000
     },
     container_white: {
         backgroundColor: "#D9D9D9",
-        height: 2060
+        height: 2000
     },
     box_comprida_alta: {
         width:'90%',
@@ -112,7 +122,7 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         height: '200%'
     },
     container_datalhes_maior_maior: {
-        height: 2060
+        height: 2020
     },
     container_datalhes_maior_maior_detalhes: {
         height: 1490
@@ -121,7 +131,7 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         height: 2200
     },
     detalher_tamanho_maior_detalhes: {
-        height: 1600
+        height: 1500
     },
     container_QrCode: {
         width: "90%",

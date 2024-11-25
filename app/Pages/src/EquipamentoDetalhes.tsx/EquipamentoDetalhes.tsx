@@ -73,7 +73,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
             <ScrollView contentContainerStyle={[styleHome.information_container, styleEquipamentosDetalhes.detalher_tamanho_maior_detalhes]}>
                 <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes, modoEscuro ? styleEquipamentosDetalhes.container_black : null]}>
                     <View style={styleEquipamentosDetalhes.container_datalhes_title}>
-                        <Text style={styleEquipamentosDetalhes.datalhes_title}>Informações do Equipamento</Text>
+                        <Text style={modoEscuro ? styleEquipamentosDetalhes.datalhes_title_dark : styleEquipamentosDetalhes.datalhes_title}>Informações do Equipamento</Text>
                     </View>
                     <View style={styleEquipamentosDetalhes.container_detalhes_information}>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
@@ -85,7 +85,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                            <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                 Selo Imetro :
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
@@ -93,7 +93,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                            <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                 Patrimonio:
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
@@ -101,7 +101,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                            <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                 Proxima Retirada:
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
@@ -109,7 +109,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                            <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                 Conformidades:
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
@@ -118,7 +118,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas}>
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
-                                <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                                <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                     Capacidade:
                                 </Text>
                                 <View style={styleEquipamentosDetalhes.box_curta_baixa}>
@@ -128,7 +128,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                                 </View>
                             </View>
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
-                                <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                                <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                     Fabricante:
                                 </Text>
                                 <View style={styleEquipamentosDetalhes.box_curta_baixa}>
@@ -140,7 +140,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas}>
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
-                                <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                                <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                     Data de Validade:
                                 </Text>
                                 <View style={styleEquipamentosDetalhes.box_curta_baixa}>
@@ -150,7 +150,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                                 </View>
                             </View>
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
-                                <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                                <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                     Ultima Manutenção:
                                 </Text>
                                 <View style={styleEquipamentosDetalhes.box_curta_baixa}>
@@ -161,7 +161,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                            <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                 Localização:
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
@@ -169,7 +169,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <Text style={styleEquipamentosDetalhes.text_box_outside}>
+                            <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
                                 Observações:
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_alta}>
@@ -178,7 +178,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                         </View>
                             <View style={styleEquipamentosDetalhes.container_QrCode}>
                                 <View>
-                                    <Text style={{ fontSize: 16, fontWeight: '500'}}>Qr Code do Equipamento</Text>
+                                    <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>Qr Code do Equipamento</Text>
                                 </View>
                                 <View style={styleEquipamentosDetalhes.just_margin_top_and_background}>
                                     {qrValue ? (

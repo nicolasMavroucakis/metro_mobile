@@ -189,7 +189,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
             <ScrollView contentContainerStyle={[styleHome.information_container, styleEquipamentosDetalhes.detalher_tamanho_maior]}>
                 <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes, modoEscuro ? styleEquipamentosDetalhes.container_black : styleEquipamentosDetalhes.container_white]}>
                     <View style={styleEquipamentosDetalhes.container_datalhes_title}>
-                        <Text style={styleEquipamentosDetalhes.datalhes_title}>Informações do Equipamento</Text>
+                        <Text style={modoEscuro ? styleEquipamentosDetalhes.datalhes_title_dark : styleEquipamentosDetalhes.datalhes_title}>Informações do Equipamento</Text>
                     </View>
                     <View style={styleEquipamentosDetalhes.container_detalhes_information}>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
@@ -246,7 +246,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                             <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes_duas_box}>
                                 <Text style={[styleEquipamentosDetalhes.text_box_outside, modoEscuro ? styleEquipamentosDetalhes.color_white : styleEquipamentosDetalhes.color_black]}>Prox Manutenção:</Text>
                                 <View style={styleEquipamentosDetalhes.box_curta_baixa}>
-                                    <Text style={{ color: modoEscuro ? 'white' : 'black'}}>
+                                    <Text style={styleEquipamentosDetalhes.box_curta_baixa}>
                                         {anoSeguinteStringLocal || ""}
                                     </Text>
                                 </View>
