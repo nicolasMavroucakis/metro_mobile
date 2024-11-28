@@ -79,6 +79,7 @@ const EquipamentoManutencaoIniciada: React.FC<EquipamentoManutencaoIniciada> = (
             Alert.alert("Erro", "Ocorreu um erro ao excluir o equipamento.");
         }
     };
+
     const handleSave = async () => {
         try {
             const equipamentosRef = collection(db, 'Equipamentos');
@@ -108,7 +109,8 @@ const EquipamentoManutencaoIniciada: React.FC<EquipamentoManutencaoIniciada> = (
                 Selo_Inmetro: seloImetro,
                 Setor: setor,
                 Tipo: tipo,
-                Fabricante: fabricante
+                Fabricante: fabricante,
+                Manutencao_Esta_Iniciada: manutencao_iniciada
             };
 
             await updateDoc(equipamentoRef, equipamentoFormatado);
@@ -139,6 +141,7 @@ const EquipamentoManutencaoIniciada: React.FC<EquipamentoManutencaoIniciada> = (
     const [seloImetro, setSeloImetro] = useState(editEquipamento.Selo_Inmetro || "")
     const [proximaRetirada, setProximaRetirada] = useState(editEquipamento.Proxima_Retirada || "")
     const [conformidades, setConfirmades] = useState(editEquipamento.Conformidades || "")
+    const manutencao_iniciada = false
 
     useEffect(() => { setQrValue(numeroEquipamento || '');  }, [numeroEquipamento]);
 

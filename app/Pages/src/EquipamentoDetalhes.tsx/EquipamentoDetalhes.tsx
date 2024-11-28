@@ -10,9 +10,11 @@ import styleEquipamentosDetalhes from "../../Style/EquipamentosDetalhesStyle";
 import { EquipamentoContext } from "@/GlobalContext/GlobalContextEquipamentos";
 import ViewShot from "react-native-view-shot";
 import QRCode from "react-native-qrcode-svg";
+import { getDocs, query, collection, where, updateDoc } from 'firebase/firestore';
+import StartFirebase from '@/crud/firebaseConfig';
 import * as MediaLibrary from "expo-media-library";
 
-type EquipamentoDetalhesProps = { 
+type EquipamentoDetalhesProps = {
     navigation: StackNavigationProp<any, any>;
 };
 
@@ -21,6 +23,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
     const {equipamentoSelecionado, NumeroGlobal, setNumeroGlobal} = useContext(EquipamentoContext)
     const [qrValue, setQrValue] = useState<string>('');
     const viewShotRef = useRef<ViewShot>(null)
+    const db = StartFirebase();
 
     const [numeroEquipamento, setNumeroEquipamento] = useState("")
 
@@ -57,19 +60,43 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
         } else {
             Alert.alert('Erro', 'Ocorreu um erro ao tentar capturar a imagem.');
         }
-    };
-
-    const conditionalNavigation = () => {
-        if (tipoPermissao != "Consultor") {
-            navigation.navigate('EquipamentoManutencaoIniciada')
-        } else {
-            Alert.alert("Erro", "voce nao tem permissao para acessar essa pagina")
-        }
     }
 
+    const conditionalNavigation = async () => {
+        if (tipoPermissao !== "Consultor") {
+            if (equipamentoSelecionado.Manutencao_Esta_Iniciada === false) {
+                const numeroEquipamentoString = equipamentoSelecionado.Numero_Equipamento;
+                try {
+                    const q = query(
+                        collection(db, 'Equipamentos'),
+                        where('Numero_Equipamento', '==', numeroEquipamentoString)
+                    );
+                    const querySnapshot = await getDocs(q);
+                    if (!querySnapshot.empty) {
+                        const docRef = querySnapshot.docs[0].ref;
+                        await updateDoc(docRef, {
+                            "Manutencao_Esta_Iniciada": true
+                        });
+                        console.log(`Campo "Manutencao_Esta_Iniciada" atualizado para true no equipamento número ${numeroEquipamentoString}`);
+                        navigation.navigate('EquipamentoManutencaoIniciada');
+                    } else {
+                        console.log(`Nenhum equipamento encontrado com o número ${numeroEquipamentoString}`);
+                    }
+                } catch (error) {
+                    console.error("Erro ao atualizar o campo:", error);
+                }
+            } else {
+                Alert.alert("Erro", "Alguém já está fazendo a manutenção desse equipamento");
+            }
+        } else {
+            Alert.alert("Erro", "Você não tem permissão para acessar essa página");
+        }
+    };
+
+
     return (
-    <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
-        <Header />
+        <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
+            <Header />
             <ScrollView contentContainerStyle={[styleHome.information_container, styleEquipamentosDetalhes.detalher_tamanho_maior_detalhes]}>
                 <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes, modoEscuro ? styleEquipamentosDetalhes.container_black : null]}>
                     <View style={styleEquipamentosDetalhes.container_datalhes_title}>
@@ -191,8 +218,8 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                                 </View>
                             </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
-                            <TouchableOpacity 
-                                style={styleEquipamentosDetalhes.botao_de_iniciar_manutencao} 
+                            <TouchableOpacity
+                                style={styleEquipamentosDetalhes.botao_de_iniciar_manutencao}
                                 onPress={conditionalNavigation}
                             >
                                 <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>Iniciar Inspeção</Text>

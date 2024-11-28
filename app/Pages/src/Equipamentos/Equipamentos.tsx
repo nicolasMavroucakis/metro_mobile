@@ -10,23 +10,23 @@ import styleUsuario from "../../Style/UsuarioStyle";
 import { GlobalContext } from "@/GlobalContext/GlobalContext";
 import { EquipamentoContext, EquipamentoSelecionadoType, EquipamentoType } from "@/GlobalContext/GlobalContextEquipamentos";
 import StartFirebase from '@/crud/firebaseConfig';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore'
 
 type Equipamentos = {
-    navigation: StackNavigationProp<any, any>;
+    navigation: StackNavigationProp<any, any>
 };
 
 const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
-    const { modoEscuro, setModoEscuro, tipoPermissao} = useContext(GlobalContext);
-    const { arrayEquipamentosGlobal } = useContext(EquipamentoContext);
-    const { setEquipamentoSelecionado, NumeroGlobal, setNumeroGlobal } = useContext(EquipamentoContext);
-    const equipamentosPesquisa = arrayEquipamentosGlobal;
+    const { modoEscuro, setModoEscuro, tipoPermissao} = useContext(GlobalContext)
+    const { arrayEquipamentosGlobal } = useContext(EquipamentoContext)
+    const { setEquipamentoSelecionado, NumeroGlobal, setNumeroGlobal } = useContext(EquipamentoContext)
+    const equipamentosPesquisa = arrayEquipamentosGlobal
 
-    const [proximaManutencaoValueInput, setProximaManutencaoValueinput] = useState('');
-    const [ultimaManutencaoValueInput, setUltimaManutencaoValueInput] = useState('');
-    const [numeroEquipamentoValueInput, setNumeroEquipamentoValueInput] = useState('');
+    const [proximaManutencaoValueInput, setProximaManutencaoValueinput] = useState('')
+    const [ultimaManutencaoValueInput, setUltimaManutencaoValueInput] = useState('')
+    const [numeroEquipamentoValueInput, setNumeroEquipamentoValueInput] = useState('')
 
-    const [pequisaIsExpanded, setPesquisaIsExpanded] = useState(false);
+    const [pequisaIsExpanded, setPesquisaIsExpanded] = useState(false)
 
     const conditionalNavigation = () => {
         if (tipoPermissao != "Consultor") {
@@ -37,80 +37,90 @@ const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
     }
 
     const handleClickInput = () => {
-        setPesquisaIsExpanded(prev => !prev);
+        setPesquisaIsExpanded(prev => !prev)
     };
 
     const [arrayAchado, setArrayAchado] = useState<EquipamentoType[]>([]);
     
     useEffect(() => {
-        console.log("arrayAchado mudou:", arrayAchado);
-    }, [arrayAchado]); 
+        console.log("arrayAchado mudou:", arrayAchado)
+    }, [arrayAchado])
 
     const handlePesquisa = () => {
 
         const filteredEquipamentos = equipamentosPesquisa.filter(equipamento => {
             const isProximaManutencaoMatch = proximaManutencaoValueInput 
                 ? equipamento.Proxima_Manutencao && equipamento['Proxima_Manutencao'].includes(proximaManutencaoValueInput)
-                : true;
+                : true
     
             const isUltimaManutencaoMatch = ultimaManutencaoValueInput 
                 ? equipamento.Ultima_manutencao && equipamento['Ultima_manutencao'].includes(ultimaManutencaoValueInput)
-                : true;
+                : true
     
             const isNumeroEquipamentoMatch = numeroEquipamentoValueInput 
                 ? equipamento.Numero_equipamento && equipamento.Numero_equipamento.toString().includes(numeroEquipamentoValueInput)
-                : true;
+                : true
     
-            return isProximaManutencaoMatch && isUltimaManutencaoMatch && isNumeroEquipamentoMatch;
+            return isProximaManutencaoMatch && isUltimaManutencaoMatch && isNumeroEquipamentoMatch
         });
     
-        console.log("Valores de entrada:", { numeroEquipamentoValueInput, proximaManutencaoValueInput, ultimaManutencaoValueInput });
-        console.log("Equipamentos filtrados:", filteredEquipamentos);
+        console.log("Valores de entrada:", { numeroEquipamentoValueInput, proximaManutencaoValueInput, ultimaManutencaoValueInput })
+        console.log("Equipamentos filtrados:", filteredEquipamentos)
     
-        return filteredEquipamentos;
+        return filteredEquipamentos
     }
    
 
     const handleBothActions = () => {
-        const resultados = handlePesquisa();
-        setArrayAchado(resultados);
-        handleClickInput();
+        const resultados = handlePesquisa()
+        setArrayAchado(resultados)
+        handleClickInput()
     };
 
-    const db = StartFirebase();
+    const db = StartFirebase()
     const navigateToEquipamentoDetalhes = async (numeroEquipamento: number) => {
         const equipamentoSelecionadoComClick = arrayAchado[numeroEquipamento];
         const numeroEquipamentoSelecionado = equipamentoSelecionadoComClick.Numero_equipamento;
         const numeroEquipamentoString = String(numeroEquipamento);
-    
+
         try {
             const q = query(
                 collection(db, 'Equipamentos'),
                 where('Numero_Equipamento', '==', numeroEquipamentoSelecionado)
             );
-                
+
             const querySnapshot = await getDocs(q);
-    
+
             if (!querySnapshot.empty) {
-                const equipamento = querySnapshot.docs[0].data(); 
+                const docRef = querySnapshot.docs[0].ref;
+                const equipamento = querySnapshot.docs[0].data();
+
+                if (!("Manutencao_Esta_Iniciada" in equipamento)) {
+                    await updateDoc(docRef, {
+                        "Manutencao_Esta_Iniciada": false
+                    });
+                    equipamento["Manutencao_Esta_Iniciada"] = false;
+                }
+
                 const equipamentoFormatado: EquipamentoSelecionadoType = {
-                    "Numero_Equipamento": equipamento["Numero_Equipamento"] || "", 
-                    "Proxima_Manutencao": equipamento["Proxima_Manutencao"] || "", 
-                    "Data_da_Inspecao": equipamento["Data_da_Inspecao"] || "", 
-                    "Area": equipamento["Area"] || "", 
-                    "Capacidade": equipamento["Capacidade"] || "", 
-                    "Local": equipamento["Local"] || "", 
-                    "Nao_Conformidades": equipamento["Nao_Conformidades"] || "", 
-                    "Observacao": equipamento["Observacao"] || "", 
-                    "Patrimonio": equipamento["Patrimonio"] || "", 
-                    "Predio": equipamento["Predio"] || "", 
-                    "Proxima_Retirada": equipamento["Proxima_Retirada"] || "", 
-                    "Selo_Inmetro": equipamento["Selo_Inmetro"] || "", 
-                    "Setor": equipamento["Setor"] || "", 
-                    "Tipo": equipamento["Tipo"] || "", 
+                    "Numero_Equipamento": equipamento["Numero_Equipamento"] || "",
+                    "Proxima_Manutencao": equipamento["Proxima_Manutencao"] || "",
+                    "Data_da_Inspecao": equipamento["Data_da_Inspecao"] || "",
+                    "Area": equipamento["Area"] || "",
+                    "Capacidade": equipamento["Capacidade"] || "",
+                    "Local": equipamento["Local"] || "",
+                    "Nao_Conformidades": equipamento["Nao_Conformidades"] || "",
+                    "Observacao": equipamento["Observacao"] || "",
+                    "Patrimonio": equipamento["Patrimonio"] || "",
+                    "Predio": equipamento["Predio"] || "",
+                    "Proxima_Retirada": equipamento["Proxima_Retirada"] || "",
+                    "Selo_Inmetro": equipamento["Selo_Inmetro"] || "",
+                    "Setor": equipamento["Setor"] || "",
+                    "Tipo": equipamento["Tipo"] || "",
                     "Fabricante": equipamento["Fabricante"] || "",
+                    "Manutencao_Esta_Iniciada": equipamento["Manutencao_Esta_Iniciada"],
                 };
-                
+
                 console.log(equipamentoFormatado);
                 setEquipamentoSelecionado(equipamentoFormatado);
                 setNumeroGlobal(numeroEquipamentoString);
@@ -123,6 +133,7 @@ const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
             Alert.alert('Erro', 'Ocorreu um erro ao pegar as informações do equipamento');
         }
     };
+
 
     return (
         <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
