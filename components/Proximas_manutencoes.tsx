@@ -4,7 +4,7 @@ import styleHome from "@/app/Pages/Style/HomeStyle";
 import { GlobalContext } from "@/GlobalContext/GlobalContext";
 import { useContext } from "react";
 import { EquipamentoContext, EquipamentoSelecionadoType } from "@/GlobalContext/GlobalContextEquipamentos";
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import {collection, query, where, getDocs, updateDoc} from 'firebase/firestore';
 import StartFirebase from '@/crud/firebaseConfig';
 
 type ProximasManutencoesProps = {
@@ -30,23 +30,34 @@ const ProximasManutencoes: React.FC<ProximasManutencoesProps> = ({ navigation })
             const querySnapshot = await getDocs(q);
     
             if (!querySnapshot.empty) {
-                const equipamento = querySnapshot.docs[0].data(); 
+                const docRef = querySnapshot.docs[0].ref;
+                const equipamento = querySnapshot.docs[0].data();
+
+                if (!("Manutencao_Esta_Iniciada" in equipamento)) {
+                    await updateDoc(docRef, {
+                        "Manutencao_Esta_Iniciada": false
+                    });
+                    equipamento["Manutencao_Esta_Iniciada"] = false;
+                }
+
                 const equipamentoFormatado: EquipamentoSelecionadoType = {
-                    "Numero_Equipamento": equipamento["Numero_Equipamento"] || "", 
-                    "Proxima_Manutencao": equipamento["Proxima_Manutencao"] || "", 
-                    "Data_da_Inspecao": equipamento["Data_da_Inspecao"] || "", 
-                    "Area": equipamento["Area"] || "", 
-                    "Capacidade": equipamento["Capacidade"] || "", 
-                    "Local": equipamento["Local"] || "", 
-                    "Nao_Conformidades": equipamento["Nao_Conformidades"] || "", 
-                    "Observacao": equipamento["Observacao"] || "", 
-                    "Patrimonio": equipamento["Patrimonio"] || "", 
-                    "Predio": equipamento["Predio"] || "", 
-                    "Proxima_Retirada": equipamento["Proxima_Retirada"] || "", 
-                    "Selo_Inmetro": equipamento["Selo_Inmetro"] || "", 
-                    "Setor": equipamento["Setor"] || "", 
-                    "Tipo": equipamento["Tipo"] || "", 
+                    "Numero_Equipamento": equipamento["Numero_Equipamento"] || "",
+                    "Proxima_Manutencao": equipamento["Proxima_Manutencao"] || "",
+                    "Data_da_Inspecao": equipamento["Data_da_Inspecao"] || "",
+                    "Area": equipamento["Area"] || "",
+                    "Capacidade": equipamento["Capacidade"] || "",
+                    "Local": equipamento["Local"] || "",
+                    "Nao_Conformidades": equipamento["Nao_Conformidades"] || "",
+                    "Observacao": equipamento["Observacao"] || "",
+                    "Patrimonio": equipamento["Patrimonio"] || "",
+                    "Predio": equipamento["Predio"] || "",
+                    "Proxima_Retirada": equipamento["Proxima_Retirada"] || "",
+                    "Selo_Inmetro": equipamento["Selo_Inmetro"] || "",
+                    "Setor": equipamento["Setor"] || "",
+                    "Tipo": equipamento["Tipo"] || "",
                     "Fabricante": equipamento["Fabricante"] || "",
+                    "Manutencao_Esta_Iniciada": equipamento["Manutencao_Esta_Iniciada"],
+                    "Gerencia": equipamento["Gerencia"] || "",
                 };
                 
                 console.log(equipamentoFormatado);

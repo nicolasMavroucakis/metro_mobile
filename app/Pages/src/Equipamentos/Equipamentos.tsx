@@ -119,6 +119,7 @@ const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
                     "Tipo": equipamento["Tipo"] || "",
                     "Fabricante": equipamento["Fabricante"] || "",
                     "Manutencao_Esta_Iniciada": equipamento["Manutencao_Esta_Iniciada"],
+                    "Gerencia": equipamento["Gerencia"] || "",
                 };
 
                 console.log(equipamentoFormatado);
@@ -133,7 +134,6 @@ const Equipamentos: React.FC<Equipamentos> = ({ navigation }) => {
             Alert.alert('Erro', 'Ocorreu um erro ao pegar as informações do equipamento');
         }
     };
-
 
     return (
         <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>

@@ -110,7 +110,8 @@ const EquipamentoManutencaoIniciada: React.FC<EquipamentoManutencaoIniciada> = (
                 Setor: setor,
                 Tipo: tipo,
                 Fabricante: fabricante,
-                Manutencao_Esta_Iniciada: manutencao_iniciada
+                Manutencao_Esta_Iniciada: manutencao_iniciada,
+                Gerencia: gerencia,
             };
 
             await updateDoc(equipamentoRef, equipamentoFormatado);
@@ -177,7 +178,7 @@ const EquipamentoManutencaoIniciada: React.FC<EquipamentoManutencaoIniciada> = (
         <SafeAreaView style={modoEscuro ? styleUsuario.background_escuro : styleHome.background}>
             <Header />
             <ScrollView contentContainerStyle={[styleHome.information_container, styleEquipamentosDetalhes.detalher_tamanho_maior]}>
-            <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes, modoEscuro ? styleEquipamentosDetalhes.container_black : styleEquipamentosDetalhes.container_white]}>
+                <View style={[styleEquipamentosDetalhes.container_datalhes, styleEquipamentosDetalhes.container_datalhes_maior_maior_detalhes, modoEscuro ? styleEquipamentosDetalhes.container_black : styleEquipamentosDetalhes.container_white]}>
                     <View style={styleEquipamentosDetalhes.container_datalhes_title}>
                         <Text style={modoEscuro ? styleEquipamentosDetalhes.datalhes_title_dark : styleEquipamentosDetalhes.datalhes_title}>Informações do Equipamento</Text>
                     </View>

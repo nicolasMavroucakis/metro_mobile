@@ -64,7 +64,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
 
     const conditionalNavigation = async () => {
         if (tipoPermissao !== "Consultor") {
-            if (equipamentoSelecionado.Manutencao_Esta_Iniciada === false) {
+            if (equipamentoSelecionado.Manutencao_Esta_Iniciada == false) {
                 const numeroEquipamentoString = equipamentoSelecionado.Numero_Equipamento;
                 try {
                     const q = query(
@@ -182,7 +182,7 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                                 </Text>
                                 <View style={styleEquipamentosDetalhes.box_curta_baixa}>
                                     <Text>
-                                        {equipamentoSelecionado.Ultima_manutencao}
+                                        {equipamentoSelecionado.Data_da_Inspecao}
                                     </Text>
                                 </View>
                             </View>
@@ -193,6 +193,14 @@ const EquipamentoDetalhes: React.FC<EquipamentoDetalhesProps> = ({ navigation })
                             </Text>
                             <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
                                 <Text>{equipamentoSelecionado.Predio}</Text>
+                            </View>
+                        </View>
+                        <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>
+                            <Text style={modoEscuro ? styleEquipamentosDetalhes.text_box_outside_dark : styleEquipamentosDetalhes.text_box_outside}>
+                                Gerencia:
+                            </Text>
+                            <View style={styleEquipamentosDetalhes.box_comprida_baixa}>
+                                <Text>{equipamentoSelecionado.Gerencia}</Text>
                             </View>
                         </View>
                         <View style={styleEquipamentosDetalhes.container_detalhes_information_boxes}>

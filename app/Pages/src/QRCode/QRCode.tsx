@@ -50,6 +50,8 @@ const QR_Code: React.FC<QR_CodeProps> = ({ navigation }) => {
                     "Setor": equipamento["Setor"] || "",
                     "Tipo": equipamento["Tipo"] || "",
                     "Fabricante": equipamento["Fabricante"] || "",
+                    "Manutencao_Esta_Iniciada": equipamento["Manutencao_Esta_Iniciada"],
+                    "Gerencia": equipamento["Gerencia"] || "",
                 };
 
                 setEquipamentoSelecionado(equipamentoFormatado);

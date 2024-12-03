@@ -139,6 +139,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                     "Setor": setor,
                     "Tipo": tipo,
                     "Fabricante": fabricante,
+                    "Gerencia": gerencia
                 };
 
                 await setDoc(equipamentoRef, equipamentoFormatado);
@@ -401,7 +402,7 @@ const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
                                 onPress={handleNewEquipamento}
                             >
                                 <Text style={{ fontSize: 18, fontWeight: '700', color: 'white' }}>
-                                    Finalizar Inspeção
+                                    Criar
                                 </Text>
                             </TouchableOpacity>
                         </View>

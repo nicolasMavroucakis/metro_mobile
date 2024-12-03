@@ -1,5 +1,9 @@
 import { StyleSheet, Dimensions, StatusBar  } from "react-native";
 
+const { width: screenWidth } = Dimensions.get('window');
+const width95Percent = screenWidth * 0.95;
+const tamnhoImagem = width95Percent / 6
+
 const statusBarHeight = StatusBar.currentHeight || 0;
 
 const styleIndex= StyleSheet.create({
@@ -51,11 +55,11 @@ const styleIndex= StyleSheet.create({
         margin: 'auto'
     },
     tamanho_foto: {
-        width: 60,
-        height: 60,
+        width: tamnhoImagem,
+        height: tamnhoImagem,
     },
     button: {
-        marginHorizontal: 10, // Adiciona espaçamento horizontal entre os botões
+        marginHorizontal: 0,
     },
     scrollContainer: {
         flexGrow: 1, 

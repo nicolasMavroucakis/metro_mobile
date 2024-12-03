@@ -77,11 +77,11 @@ const styleEquipamentosDetalhes= StyleSheet.create({
     },
     container_black: {
         backgroundColor: "#141515",
-        height: 2000
+        height: 2060
     },
     container_white: {
         backgroundColor: "#D9D9D9",
-        height: 2000
+        height: 2060
     },
     box_comprida_alta: {
         width:'90%',
@@ -125,13 +125,13 @@ const styleEquipamentosDetalhes= StyleSheet.create({
         height: 2020
     },
     container_datalhes_maior_maior_detalhes: {
-        height: 1490
+        height: 1580
     },
     detalher_tamanho_maior: {
         height: 2200
     },
     detalher_tamanho_maior_detalhes: {
-        height: 1500
+        height: 1900
     },
     container_QrCode: {
         width: "90%",
