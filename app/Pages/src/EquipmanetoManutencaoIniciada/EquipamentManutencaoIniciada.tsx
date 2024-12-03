@@ -24,18 +24,17 @@ type EquipamentoManutencaoIniciada = {
 
 const EquipamentoManutencaoIniciada: React.FC<EquipamentoManutencaoIniciada> = ({ navigation }) => {
     const { equipamentoOptions, fetchEquipamentoOptions } = useEquipamento()
-    const viewShotRef = useRef<ViewShot>(null)
     const [qrValue, setQrValue] = useState<string>('');
+    const viewShotRef = useRef<ViewShot>(null);
 
     const agora = new Date();
-    const agoraUtc = new Date(agora.getTime() - (agora.getTimezoneOffset() * 60000));
-    const agoraStringLocal = agoraUtc.toLocaleString("pt-BR");
+    const agoraStringLocal = agora.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
     console.log(agoraStringLocal);
 
     const anoSeguinte = new Date(agora);
     anoSeguinte.setFullYear(anoSeguinte.getFullYear() + 1);
 
-    const anoSeguinteStringLocal = anoSeguinte.toLocaleDateString("pt-BR"); 
+    const anoSeguinteStringLocal = anoSeguinte.toLocaleDateString("pt-BR");
     console.log(anoSeguinteStringLocal);
 
     const { modoEscuro, hasMediaLibraryPermission, setHasMediaLibraryPermission } = useContext(GlobalContext);
@@ -46,7 +45,7 @@ const EquipamentoManutencaoIniciada: React.FC<EquipamentoManutencaoIniciada> = (
     useEffect(() => {
         setEditEquipamento({ ...equipamentoSelecionado });
     }, [equipamentoSelecionado]);
-
+    
     const db = StartFirebase();
 
     const handleInputChange = (field: string, value: string) => {
