@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { SafeAreaView, Text, Image, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import { StackNavigationProp } from '@react-navigation/stack';
+import moment from 'moment';
 import styleLogin from "../Style/LoginStyle";
 import styleIndex from '../Style/indexStyle';
 import StartFirebase from '@/crud/firebaseConfig';
@@ -21,8 +22,9 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
     const { setArrayEquipamentosGlobal } = useContext(EquipamentoContext);
 
     const handleLogin = async () => {
-        if (senha == '' && usuario == '') {
+        if (senha === '' && usuario === '') {
             navigation.navigate('Home');
+            return;
         }
 
         try {
@@ -40,7 +42,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
                 setUsuarioGlobal(usuario);
                 setNome(userData.Nome);
                 setTipoPermissao(userData.Permissao);
-                handleEquipamentosIfTrue();
+                await handleEquipamentosIfTrue();
                 navigation.navigate('Home');
             } else {
                 Alert.alert('Erro', 'Usuário ou senha incorretos');
@@ -74,35 +76,37 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 
             console.log("Equipamentos com Manutenção Mais Recente:", equipamentosMaisRecentes);
             console.log("Equipamentos com Próxima Inspeção Mais Próxima:", equipamentosProximaManutencao);
-            
+
         } catch (error) {
             console.error("Erro ao obter equipamentos:", error);
         }
     };
-    
+
     const selecionarEquipamentosManutencaoRecente = (equipamentos: EquipamentoType[]) => {
         return equipamentos
             .filter((equipamento) => {
-                const inspecao = new Date(equipamento.Data_da_Inspecao || "");
+                const inspecao = moment(equipamento.Data_da_Inspecao, 'DD/MM/YYYY').toDate();
+                console.log(`Parsed Data da Inspecao: ${inspecao}`);
                 return inspecao <= new Date();
             })
             .sort((a, b) => {
-                const inspecaoA = new Date(a.Data_da_Inspecao || "");
-                const inspecaoB = new Date(b.Data_da_Inspecao || "");
+                const inspecaoA = moment(a.Data_da_Inspecao, 'DD/MM/YYYY').toDate();
+                const inspecaoB = moment(b.Data_da_Inspecao, 'DD/MM/YYYY').toDate();
                 return inspecaoB.getTime() - inspecaoA.getTime();
             })
             .slice(0, 10);
     };
-    
+
     const selecionarEquipamentosProximaManutencao = (equipamentos: EquipamentoType[]) => {
         return equipamentos
             .filter((equipamento) => {
-                const manutencao = new Date(equipamento.Proxima_Manutencao || "");
+                const manutencao = moment(equipamento.Proxima_Manutencao, 'DD/MM/YYYY').toDate();
+                console.log(`Parsed Proxima Manutencao: ${manutencao}`);
                 return manutencao >= new Date();
             })
             .sort((a, b) => {
-                const manutencaoA = new Date(a.Proxima_Manutencao || "");
-                const manutencaoB = new Date(b.Proxima_Manutencao || "");
+                const manutencaoA = moment(a.Proxima_Manutencao, 'DD/MM/YYYY').toDate();
+                const manutencaoB = moment(b.Proxima_Manutencao, 'DD/MM/YYYY').toDate();
                 return manutencaoA.getTime() - manutencaoB.getTime();
             })
             .slice(0, 10);

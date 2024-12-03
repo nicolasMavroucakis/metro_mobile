@@ -22,27 +22,27 @@ type EquipamentosNovos = {
 
 const EquipamentosNovos: React.FC<EquipamentosNovos> = ({ navigation }) => {
     const [qrValue, setQrValue] = useState<string>('');
-    const viewShotRef = useRef<ViewShot>(null)
+    const viewShotRef = useRef<ViewShot>(null);
 
     const agora = new Date();
-    const agoraStringLocal = agora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    const agoraStringLocal = agora.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
     console.log(agoraStringLocal);
-    
+
     const anoSeguinte = new Date(agora);
     anoSeguinte.setFullYear(anoSeguinte.getFullYear() + 1);
-    
-    const anoSeguinteStringLocal = anoSeguinte.toLocaleDateString("pt-BR"); 
+
+    const anoSeguinteStringLocal = anoSeguinte.toLocaleDateString("pt-BR");
     console.log(anoSeguinteStringLocal);
-    
+
     const { modoEscuro, hasMediaLibraryPermission, setHasMediaLibraryPermission } = useContext(GlobalContext);
     const { equipamentoSelecionado, setEquipamentoSelecionado, NumeroGlobal } = useContext(EquipamentoContext);
-    
+
     const [editEquipamento, setEditEquipamento] = useState({ ...equipamentoSelecionado });
-    
+
     useEffect(() => {
         setEditEquipamento({ ...equipamentoSelecionado });
     }, [equipamentoSelecionado]);
-    
+
     const db = StartFirebase();
     
     const handleInputChange = (field: string, value: string) => {
